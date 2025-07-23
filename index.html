@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8" /><title>Coffee Blends</title></head>
+<body>
+  <h1>Coffee Blends</h1>
+  <ul id="blend-list">Loading...</ul>
+
+  <h2>Add a Blend</h2>
+  <form id="addBlendForm">
+    <input type="text" id="name" placeholder="Name" required />
+    <input type="text" id="origin" placeholder="Origin" required />
+    <button type="submit">Add</button>
+  </form>
+
+  <script>
+    async function fetchBlends() {
+      const res = await fetch('/.netlify/functions/get_coffee_blends');
+      if (!res.ok) {
+        document.getElementById('blend-list').textContent = 'Failed to load blends';
+        return;
+      }
+      const blends = await res.json();
+      const list = document.getElementById('blend-list');
+      list.innerHTML = '';
+      blends.forEach(b => {
+        const li = document.createElement('li');
+        li.textContent = `${b.name} - Origin: ${b.origin}`;
+        list.appendChild(li);
+      });
+    }
+
+    async function addBlend(name, origin) {
+      const res = await fetch('/.netlify/functions/add_coffee_blend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, origin })
+      });
+      if (!res.ok) {
+        alert('Failed to add blend');
+      } else {
+        alert('Blend added!');
+        fetchBlends();
+      }
+    }
+
+    document.getElementById('addBlendForm').addEventListener('submit', e => {
+      e.preventDefault();
+      addBlend(
+        e.target.name.value.trim(),
+        e.target.origin.value.trim()
+      );
+      e.target.reset();
+    });
+
+    fetchBlends();
+  </script>
+</body>
+</html>
