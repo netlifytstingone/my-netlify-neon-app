@@ -1,0 +1,12 @@
+{
+  "name": "my-netlify-neon-app",
+  "version": "1.0.0",
+  "description": "Demo Netlify app using Neon DB",
+  "main": "netlify/functions/get_coffee_blends.js",
+  "scripts": {
+    "start": "netlify dev"
+  },
+  "dependencies": {
+    "@netlify/neon": "^1.1.10"
+  }
+}
