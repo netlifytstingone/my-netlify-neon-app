@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Netlify + Neon DB Demo</title>
+</head>
+<body>
+  <h1>Coffee Blends</h1>
+  <ul id="blend-list">Loading...</ul>
+
+  <script>
+    async function fetchBlends() {
+      try {
+        const response = await fetch('/.netlify/functions/get_coffee_blends');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const blends = await response.json();
+
+        const list = document.getElementById('blend-list');
+        list.innerHTML = '';
+        blends.forEach(blend => {
+          const li = document.createElement('li');
+          li.textContent = `${blend.name} - Origin: ${blend.origin}`;
+          list.appendChild(li);
+        });
+      } catch (error) {
+        document.getElementById('blend-list').textContent = `Error: ${error.message}`;
+      }
+    }
+
+    fetchBlends();
+  </script>
+</body>
+</html>
