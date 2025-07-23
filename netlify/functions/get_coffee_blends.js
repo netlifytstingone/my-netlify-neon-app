@@ -1,6 +1,6 @@
 import { neon } from '@netlify/neon';
 
-const sql = neon(); // Automatically reads NETLIFY_DATABASE_URL env var
+const sql = neon();
 
 export async function handler() {
   try {
@@ -8,11 +8,9 @@ export async function handler() {
     return {
       statusCode: 200,
       body: JSON.stringify(blends),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      headers: { 'Content-Type': 'application/json' }
     };
-  } catch (error) {
-    return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
+  } catch (err) {
+    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
 }
